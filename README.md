@@ -1,4 +1,12 @@
-Hello-World-Client
-This is an example http client using protocol buffers inside of a rest endpoint in Lisp. We use the cl-protobufs lisp protocol buffer implemenation and the Drakma client.
+# Hello-World-Client
 
-The author makes no claim of optimality. Really one probably shouldn't use bare Hunchentoot but something like Caveman. Also, some work should be done to have better protocol buffer support in the client. This is left as an exercise to the reader.
+This is an example http client using protocol buffers
+sending to a rest endpoint in Lisp.
+We use the [cl-protobufs](https://github.com/qitab/cl-protobufs)
+protocol buffer implemenation and the
+[Drakma](https://github.com/edicl/drakma) client.
+
+
+The author makes no claim of optimality.
+Ssome work should be done to have better protocol buffer
+support in the client. This is left as an exercise to the reader.
