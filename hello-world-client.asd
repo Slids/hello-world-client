@@ -5,7 +5,8 @@
   :description      "CL-protobuf Hello World Client"
   :long-description "CL-protobuf Hello World Client"
   :defsystem-depends-on (:cl-protobufs)
-  :depends-on (:drakma :flexi-streams)
+  :depends-on (:drakma :flexi-streams
+               :cl-base64 :protobuf-utilities)
   :components
   ((:module "src"
     :serial t
