@@ -2,8 +2,7 @@
   (:use #:cl)
   (:export #:call-hello-world)
   (:local-nicknames
-   (#:hwp #:cl-protobufs.hello-world)
-   (#:pu #:protobuf-utilities)))
+   (#:hwp #:cl-protobufs.hello-world)))
 
 (in-package #:hello-world-client)
 
@@ -13,30 +12,22 @@
 
 (defvar *handler* "hello")
 
-(defun proto-call (call-name-proto-list return-type address)
-  (let* ((call-name-serialized-proto-list
-           (loop for (call-name .  proto) in call-name-proto-list
-                 for ser-proto = (pu:serialize-proto-to-base64-string proto)
-                 collect
-                 (cons call-name ser-proto)))
-         (call-result
-           (or (drakma:http-request
-                address
-                :parameters call-name-serialized-proto-list)
-               "")))
-    (pu:deserialize-proto-from-base64-string return-type call-result)))
-
-(defun call-hello-world (name &key (address *address*)
-                                (port *port*)
-                                (handler *handler*))
+(defun call-hello-world (&key name
+                           (address *address*)
+                           (port *port*)
+                           (handler *handler*))
   (declare (type (or null string) name))
   (let* ((proto-to-send
            (if name
                (hwp:make-request :name name)
                (hwp:make-request)))
          (address (concatenate 'string address ":" port "/" handler))
-         (response (proto-call (list (cons "request" proto-to-send))
-                               'hwp:response
-                               address)))
+         (response
+           (cl-protobufs:deserialize-from-bytes
+            'hwp:response
+            (drakma:http-request
+             address
+             :content-type "application/octet-stream"
+             :content (cl-protobufs:serialize-to-bytes proto-to-send)))))
     (print
      (hwp:response.response response))))
